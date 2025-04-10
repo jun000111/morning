@@ -2,8 +2,8 @@ import { useSignIn } from '@clerk/clerk-expo';
 import { Link, useRouter } from 'expo-router';
 import { Text, TextInput, TouchableOpacity, View } from 'react-native';
 import React from 'react';
-import { SignOutButton } from '@/components/SignOutButton';
-
+import { SignOutButton } from '@/components/auth/SignOutButton';
+import GoogleSignIn from '@/components/auth/GoogleSignIn';
 export default function Page() {
   const { signIn, setActive, isLoaded } = useSignIn();
   const router = useRouter();
@@ -63,6 +63,7 @@ export default function Page() {
           <Text>Sign up</Text>
         </Link>
       </View>
+      <GoogleSignIn />
       <SignOutButton />
     </View>
   );
