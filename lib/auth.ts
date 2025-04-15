@@ -9,17 +9,6 @@ export async function signInWithGoogle(sso: any) {
       redirectUrl,
     });
 
-    console.log(
-      createdSessionId,
-      'hihi',
-      setActive,
-      'hello',
-      signIn,
-      'whatup',
-      signUp,
-      'whatever'
-    );
-
     if (createdSessionId) {
       if (setActive) {
         await setActive!({ session: createdSessionId });
