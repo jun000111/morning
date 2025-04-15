@@ -18,7 +18,7 @@ export default function GoogleSignIn() {
     try {
       const result = await signInWithGoogle(startSSOFlow);
       if (result.success) {
-        router.replace('/');
+        router.replace('/(root)/main');
       }
     } catch (err) {
       console.error(JSON.stringify(err, null, 2));

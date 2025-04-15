@@ -1,8 +1,8 @@
-import { Text, TouchableOpacity, View } from 'react-native';
-
+import { useEffect, useState, useRef } from 'react';
+import { Text, View, TouchableOpacity } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
-import { useRef, useState } from 'react';
+import { useAuth } from '@clerk/clerk-expo';
 import Swiper from 'react-native-swiper';
 import { onboarding } from '@/constants';
 import { Image } from 'react-native';
@@ -12,16 +12,32 @@ const Welcome = () => {
   const swiperRef = useRef<Swiper>(null);
   const [activeIndex, setActiveIndex] = useState(0);
   const isLastSilde = activeIndex === onboarding.length - 1;
+
+  const { isSignedIn, isLoaded } = useAuth();
+  const [authChecked, setAuthChecked] = useState(false);
+
+  useEffect(() => {
+    if (isLoaded) {
+      if (isSignedIn) {
+        router.replace('/(root)/main');
+      } else {
+        setAuthChecked(true); // allow rendering the welcome screen
+      }
+    }
+  }, [isLoaded, isSignedIn]);
+
+  // Don't render anything until auth is checked
+  if (!authChecked) return null;
+
   return (
     <SafeAreaView className="flex h-full items-center justify-between bg-white">
       <TouchableOpacity
-        onPress={() => {
-          router.replace('/(auth)/sign-up');
-        }}
+        onPress={() => router.replace('/(auth)/sign-up')}
         className="w-full flex justify-end items-end p-5"
       >
         <Text className="text-black text-md font-JakartaBold">Skip</Text>
       </TouchableOpacity>
+
       <Swiper
         ref={swiperRef}
         loop={false}
@@ -45,13 +61,13 @@ const Welcome = () => {
                 {item.title}
               </Text>
             </View>
-
             <Text className="text-lg font-JakartaSemiBold text-center text-[#858585] mx-10 mt-3">
               {item.description}
             </Text>
           </View>
         ))}
       </Swiper>
+
       <CustomButton
         title={isLastSilde ? 'Get Started' : 'Next'}
         onPress={() =>
