@@ -5,7 +5,9 @@ import {
   View,
   NativeSyntheticEvent,
   NativeScrollEvent,
+  Pressable,
 } from 'react-native';
+import CardModal from './AutoScrollCardModal';
 
 const data = Array.from({ length: 10 }, (_, i) => ({
   id: i + 1,
@@ -24,6 +26,19 @@ export default function AutoScrollCarousel() {
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
   const resumeTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const [isUserScrolling, setIsUserScrolling] = useState(false);
+
+  const [selectedCard, setSelectdCard] = useState<{
+    id: number;
+    title: string;
+  } | null>(null);
+
+  const onCardPress = (id: number, title: string) => {
+    setSelectdCard({ id, title });
+  };
+  const handleOnCardClose = () => {
+    setIsUserScrolling(false);
+    setSelectdCard(null);
+  };
 
   const startAutoScroll = () => {
     if (intervalRef.current) return;
@@ -64,18 +79,21 @@ export default function AutoScrollCarousel() {
     scrollPos.current = event.nativeEvent.contentOffset.x;
   };
 
-  const handleTouchStart = () => {
-    stopAutoScroll();
-    setIsUserScrolling(true);
-    if (resumeTimeoutRef.current) clearTimeout(resumeTimeoutRef.current);
-  };
+  useEffect(() => {
+    if (isUserScrolling) {
+      stopAutoScroll();
+      if (resumeTimeoutRef.current) clearTimeout(resumeTimeoutRef.current);
+    } else {
+      resumeTimeoutRef.current = setTimeout(() => {
+        startAutoScroll();
+      }, RESUME_DELAY);
+    }
 
-  const handleTouchEnd = () => {
-    setIsUserScrolling(false);
-    resumeTimeoutRef.current = setTimeout(() => {
-      startAutoScroll();
-    }, RESUME_DELAY);
-  };
+    return () => {
+      stopAutoScroll();
+      if (resumeTimeoutRef.current) clearTimeout(resumeTimeoutRef.current);
+    };
+  }, [isUserScrolling]);
 
   return (
     <View className="mt-6 h-40 justify-items-center items-center">
@@ -86,20 +104,30 @@ export default function AutoScrollCarousel() {
         scrollEnabled
         showsHorizontalScrollIndicator={false}
         onScroll={handleScroll}
-        onTouchStart={handleTouchStart}
-        onScrollEndDrag={handleTouchEnd}
-        onMomentumScrollEnd={handleTouchEnd}
+        onTouchStart={() => setIsUserScrolling(true)}
+        onScrollEndDrag={() => setIsUserScrolling(false)}
+        onMomentumScrollEnd={() => setIsUserScrolling(false)}
         scrollEventThrottle={16}
       >
         {[...data, ...data].map((item, index) => (
-          <View
+          <Pressable
+            className="w-40 h-full bg-gray-300 mx-2 justify-center items-center rounded-xl active:opacity-50"
             key={`${item.id}-${index}`}
-            className="w-40 h-full bg-gray-300 mx-2 justify-center items-center rounded-xl"
+            onPress={() => onCardPress(item.id, item.title)}
           >
-            <Text className="text-lg font-bold">{item.title}</Text>
-          </View>
+            <View>
+              <Text className="text-lg font-bold">{item.title}</Text>
+            </View>
+          </Pressable>
         ))}
       </ScrollView>
+      {selectedCard ? (
+        <CardModal
+          visible={true}
+          title={selectedCard.title}
+          onClose={handleOnCardClose}
+        />
+      ) : null}
     </View>
   );
 }

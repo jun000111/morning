@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { SafeAreaView, View, Text, Dimensions } from 'react-native';
-import AutoScrollCarousel from '@/components/AutoScrollCarousel';
+import AutoScrollCarousel from '@/components/autoScroll/AutoScrollCarousel';
 import { SignOutButton } from '@/components/auth/SignOutButton';
 
 const data = [
