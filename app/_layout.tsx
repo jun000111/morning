@@ -6,6 +6,7 @@ import 'react-native-reanimated';
 import { ClerkProvider } from '@clerk/clerk-expo';
 import { tokenCache } from '@clerk/clerk-expo/token-cache';
 import '@/global.css';
+import { ENV } from '@/constants/env';
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -21,7 +22,7 @@ export const unstable_settings = {
 SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
-  const publishableKey = process.env.EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY!;
+  const publishableKey = ENV.CLERK_PUBLISHABLE_KEY;
 
   if (!publishableKey) {
     throw new Error('Add EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY in your .env');

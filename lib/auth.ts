@@ -1,5 +1,5 @@
 import * as AuthSession from 'expo-auth-session';
-import { fetchAPI } from './fetch';
+import { registerUser } from '@/services/authService';
 
 export async function signInWithGoogle(sso: any) {
   try {
@@ -14,13 +14,10 @@ export async function signInWithGoogle(sso: any) {
         await setActive!({ session: createdSessionId });
 
         if (signUp.createdUserId) {
-          await fetchAPI('/(api)/user', {
-            method: 'POST',
-            body: JSON.stringify({
-              name: 'carl jung',
-              email: signUp.emailAddress,
-              clerkId: createdSessionId,
-            }),
+          await registerUser({
+            name: 'carl jung',
+            email: signUp.emailAddress,
+            clerkId: createdSessionId,
           });
         }
         return {
