@@ -1,10 +1,16 @@
-import { UserRegisterDTO } from '@/types/User';
-import { User } from '@/types/User';
 import api from '../lib/api';
+import { User } from '@/types/User';
 
-export const registerUser = async (user: UserRegisterDTO): Promise<User> => {
-  const res = await api.post('/users/register', {
-    ...user,
-  });
+export const registerUser = async (token: string): Promise<User> => {
+  const res = await api.post(
+    '/users/register',
+    {}, // No need to send user info from frontend
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+
   return res.data;
 };
