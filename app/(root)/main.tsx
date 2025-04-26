@@ -2,6 +2,8 @@ import * as React from 'react';
 import { SafeAreaView, View, Text, Dimensions } from 'react-native';
 import AutoScrollCarousel from '@/components/autoScroll/AutoScrollCarousel';
 import { SignOutButton } from '@/components/auth/SignOutButton';
+import { useEffect } from 'react';
+import { getAllPlatters } from '@/services/platterService';
 
 const data = [
   { id: '1', title: 'item 1' },
@@ -18,6 +20,14 @@ const data = [
 ];
 
 const Main = () => {
+  useEffect(() => {
+    const fetchPlatters = async () => {
+      const items = await getAllPlatters();
+      console.log(items);
+    };
+    fetchPlatters();
+  }, []);
+
   return (
     <SafeAreaView>
       <AutoScrollCarousel />
