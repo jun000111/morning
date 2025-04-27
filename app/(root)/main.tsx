@@ -2,38 +2,26 @@ import * as React from 'react';
 import { SafeAreaView, View, Text, Dimensions } from 'react-native';
 import AutoScrollCarousel from '@/components/autoScroll/AutoScrollCarousel';
 import { SignOutButton } from '@/components/auth/SignOutButton';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { getAllPlatters } from '@/services/platterService';
+import { Platter } from '@/types/Platter';
 
-const data = [
-  { id: '1', title: 'item 1' },
-  { id: '2', title: 'item 2' },
-  { id: '3', title: 'item 3' },
-  { id: '4', title: 'item 4' },
-  { id: '5', title: 'item 4' },
-  { id: '6', title: 'item 4' },
-  { id: '7', title: 'item 4' },
-  { id: '8', title: 'item 4' },
-  { id: '9', title: 'item 4' },
-  { id: '10', title: 'item 4' },
-  { id: '11', title: 'item 4' },
-];
-
-const Main = () => {
+const MainScreen = () => {
+  const [platters, setPlatters] = useState<Platter[]>([]);
   useEffect(() => {
     const fetchPlatters = async () => {
-      const items = await getAllPlatters();
-      console.log(items);
+      const platters = await getAllPlatters();
+      setPlatters(platters);
     };
     fetchPlatters();
   }, []);
 
   return (
     <SafeAreaView>
-      <AutoScrollCarousel />
+      <AutoScrollCarousel platters={platters} />
       <SignOutButton />
     </SafeAreaView>
   );
 };
 
-export default Main;
+export default MainScreen;

@@ -8,7 +8,7 @@ import { onboarding } from '@/constants';
 import { Image } from 'react-native';
 import CustomButton from '@/components/CustomButton';
 
-const Welcome = () => {
+const WelcomeScreen = () => {
   const swiperRef = useRef<Swiper>(null);
   const [activeIndex, setActiveIndex] = useState(0);
   const isLastSilde = activeIndex === onboarding.length - 1;
@@ -81,4 +81,4 @@ const Welcome = () => {
   );
 };
 
-export default Welcome;
+export default WelcomeScreen;

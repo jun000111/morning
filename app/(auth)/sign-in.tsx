@@ -4,7 +4,8 @@ import { Text, TextInput, TouchableOpacity, View } from 'react-native';
 import React from 'react';
 import { SignOutButton } from '@/components/auth/SignOutButton';
 import GoogleSignIn from '@/components/auth/GoogleSignIn';
-export default function Page() {
+
+export default function SignInScreen() {
   const { signIn, setActive, isLoaded } = useSignIn();
   const router = useRouter();
 

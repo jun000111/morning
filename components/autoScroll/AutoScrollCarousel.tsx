@@ -8,11 +8,7 @@ import {
   Pressable,
 } from 'react-native';
 import CardModal from './AutoScrollCardModal';
-
-const data = Array.from({ length: 10 }, (_, i) => ({
-  id: i + 1,
-  title: `Item ${i + 1}`,
-}));
+import { Platter } from '@/types/Platter';
 
 const CARD_WIDTH = 120;
 const SPACING = 10;
@@ -20,7 +16,11 @@ const SCROLL_STEP = 1;
 const FPS_INTERVAL = 16;
 const RESUME_DELAY = 800;
 
-export default function AutoScrollCarousel() {
+export default function AutoScrollCarousel({
+  platters,
+}: {
+  platters: Platter[];
+}) {
   const scrollRef = useRef<ScrollView>(null);
   const scrollPos = useRef(0);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
@@ -51,7 +51,7 @@ export default function AutoScrollCarousel() {
         animated: false,
       });
 
-      const maxScroll = (CARD_WIDTH + SPACING * 2) * data.length;
+      const maxScroll = (CARD_WIDTH + SPACING * 2) * platters.length;
 
       if (scrollPos.current >= maxScroll) {
         scrollPos.current = 0;
@@ -109,14 +109,14 @@ export default function AutoScrollCarousel() {
         onMomentumScrollEnd={() => setIsUserScrolling(false)}
         scrollEventThrottle={16}
       >
-        {[...data, ...data].map((item, index) => (
+        {[...platters, ...platters].map((platter, index) => (
           <Pressable
             className="w-40 h-full bg-gray-300 mx-2 justify-center items-center rounded-xl active:opacity-50"
-            key={`${item.id}-${index}`}
-            onPress={() => onCardPress(item.id, item.title)}
+            key={`${platter.id}-${index}`}
+            onPress={() => onCardPress(platter.id, platter.name)}
           >
             <View>
-              <Text className="text-lg font-bold">{item.title}</Text>
+              <Text className="text-lg font-bold">{platter.name}</Text>
             </View>
           </Pressable>
         ))}
