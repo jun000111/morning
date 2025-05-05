@@ -8,7 +8,7 @@ import {
   Pressable,
 } from 'react-native';
 import CardModal from './AutoScrollCardModal';
-import { Platter } from '@/types/Platter';
+import { PlatterIngredientNutrition } from '@/types/Platter';
 
 const CARD_WIDTH = 120;
 const SPACING = 10;
@@ -19,7 +19,7 @@ const RESUME_DELAY = 800;
 export default function AutoScrollCarousel({
   platters,
 }: {
-  platters: Platter[];
+  platters: Record<string, PlatterIngredientNutrition[]>;
 }) {
   const scrollRef = useRef<ScrollView>(null);
   const scrollPos = useRef(0);
@@ -27,13 +27,11 @@ export default function AutoScrollCarousel({
   const resumeTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const [isUserScrolling, setIsUserScrolling] = useState(false);
 
-  const [selectedCard, setSelectdCard] = useState<{
-    id: number;
-    title: string;
-  } | null>(null);
+  const [selectedCard, setSelectdCard] =
+    useState<PlatterIngredientNutrition | null>(null);
 
-  const onCardPress = (id: number, title: string) => {
-    setSelectdCard({ id, title });
+  const onCardPress = (platter: PlatterIngredientNutrition) => {
+    setSelectdCard(platter);
   };
   const handleOnCardClose = () => {
     setIsUserScrolling(false);
@@ -51,7 +49,8 @@ export default function AutoScrollCarousel({
         animated: false,
       });
 
-      const maxScroll = (CARD_WIDTH + SPACING * 2) * platters.length;
+      const maxScroll =
+        (CARD_WIDTH + SPACING * 2) * Object.keys(platters).length;
 
       if (scrollPos.current >= maxScroll) {
         scrollPos.current = 0;
@@ -73,7 +72,7 @@ export default function AutoScrollCarousel({
       stopAutoScroll();
       if (resumeTimeoutRef.current) clearTimeout(resumeTimeoutRef.current);
     };
-  }, []);
+  }, [platters]);
 
   const handleScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
     scrollPos.current = event.nativeEvent.contentOffset.x;
@@ -95,6 +94,9 @@ export default function AutoScrollCarousel({
     };
   }, [isUserScrolling]);
 
+  const flatPlatters = Object.values(platters).flat();
+  const duplicatedPlatters = [...flatPlatters, ...flatPlatters];
+
   return (
     <View className="mt-6 h-40 justify-items-center items-center">
       <ScrollView
@@ -109,11 +111,11 @@ export default function AutoScrollCarousel({
         onMomentumScrollEnd={() => setIsUserScrolling(false)}
         scrollEventThrottle={16}
       >
-        {[...platters, ...platters].map((platter, index) => (
+        {duplicatedPlatters.map((platter, index) => (
           <Pressable
             className="w-40 h-full bg-gray-300 mx-2 justify-center items-center rounded-xl active:opacity-50"
             key={`${platter.id}-${index}`}
-            onPress={() => onCardPress(platter.id, platter.name)}
+            onPress={() => onCardPress(platter)}
           >
             <View>
               <Text className="text-lg font-bold">{platter.name}</Text>
@@ -124,7 +126,7 @@ export default function AutoScrollCarousel({
       {selectedCard ? (
         <CardModal
           visible={true}
-          title={selectedCard.title}
+          platter={selectedCard}
           onClose={handleOnCardClose}
         />
       ) : null}

@@ -1,13 +1,15 @@
+import { PlatterIngredientNutrition } from '@/types/Platter';
 import { useState } from 'react';
 import { Modal, View, Text, Pressable } from 'react-native';
 
 interface Props {
   visible: boolean;
-  title: string;
+  platter: PlatterIngredientNutrition;
   onClose: () => void;
 }
 
-export default function CardModal({ visible, title, onClose }: Props) {
+// Todo : allergy ingredients should have a red outline
+export default function CardModal({ visible, platter, onClose }: Props) {
   return (
     <Modal
       visible={visible}
@@ -17,8 +19,8 @@ export default function CardModal({ visible, title, onClose }: Props) {
     >
       <View className="flex-1 justify-center items-center bg-black/50">
         <View className="w-4/5 bg-white p-6 rounded-xl">
-          <Text className="text-lg font-bold mb-2">Card Tapped</Text>
-          <Text className="text-base mb-4">{title}</Text>
+          <Text className="text-lg font-bold mb-2">{platter.name}</Text>
+          <Text className="text-base mb-4">{platter.description}</Text>
           <Pressable
             accessibilityRole="button"
             onPress={onClose}

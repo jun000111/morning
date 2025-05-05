@@ -1,8 +1,9 @@
 import * as React from 'react';
 import { Text, TextInput, TouchableOpacity, View } from 'react-native';
-import { useSignUp } from '@clerk/clerk-expo';
+import { useSignUp, useAuth } from '@clerk/clerk-expo';
 import { Link, useRouter } from 'expo-router';
 import { registerUser } from '@/services/authService';
+import { UserRegisterDTO } from '@/dto/user.dto';
 
 export default function SignUpScreen() {
   const { isLoaded, signUp, setActive } = useSignUp();
@@ -13,18 +14,23 @@ export default function SignUpScreen() {
   const [pendingVerification, setPendingVerification] = React.useState(false);
   const [code, setCode] = React.useState('');
 
+  const { getToken } = useAuth();
+
   // Handle submission of sign-up form
   const onSignUpPress = async () => {
     if (!isLoaded) return;
 
     console.log(emailAddress, password);
+    const userDTO: UserRegisterDTO = {
+      username: 'testing',
+      emailAddress,
+      password,
+    };
 
     // Start sign-up process using email and password provided
     try {
-      await signUp.create({
-        emailAddress,
-        password,
-      });
+      await signUp.create(userDTO);
+      ``;
 
       // Send user an email with verification code
       await signUp.prepareEmailAddressVerification({ strategy: 'email_code' });
@@ -52,13 +58,9 @@ export default function SignUpScreen() {
       // If verification was completed, set the session to active
       // and redirect the user
       if (signUpAttempt.status === 'complete' && signUpAttempt.createdUserId) {
-        console.log('reging');
-        await registerUser({
-          name: 'carl jung',
-          email: emailAddress,
-          clerkId: signUpAttempt.createdUserId,
-        });
         await setActive({ session: signUpAttempt.createdSessionId });
+        const token = await getToken();
+        await registerUser(token!);
         router.replace('/');
       } else {
         // If the status is not complete, check why. User may need to
