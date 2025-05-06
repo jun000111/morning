@@ -17,5 +17,7 @@ export interface PlatterIngredientNutrition {
   id: number;
   name: string;
   description: string;
-  ingredients: IngredientNutrition[];
+  nutriSummary: Omit<IngredientNutrition, 'id' | 'name'>;
+  ingredients: Ingredient[];
+  ingredientsNutrition: IngredientNutrition[];
 }
