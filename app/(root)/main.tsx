@@ -5,6 +5,7 @@ import { SignOutButton } from '@/components/auth/SignOutButton';
 import { useEffect, useState } from 'react';
 import { getAllPlatters } from '@/services/platterService';
 import { PlatterIngredientNutrition } from '@/types/Platter';
+import { router } from 'expo-router';
 
 const MainScreen = () => {
   const [platters, setPlatters] = useState<
@@ -18,9 +19,13 @@ const MainScreen = () => {
     fetchPlatters();
   }, []);
 
-  const handleOnPress = async () => {
+  const handleReloadDatabase = async () => {
     const platters = await getAllPlatters();
     console.log(platters);
+  };
+
+  const handleCalender = () => {
+    router.push('/(root)/calendar');
   };
 
   return (
@@ -29,10 +34,17 @@ const MainScreen = () => {
       <SignOutButton />
       <Pressable
         accessibilityRole="button"
-        onPress={handleOnPress}
-        className="bg-blue-500 py-2 px-4 rounded"
+        onPress={handleReloadDatabase}
+        className="bg-blue-500 py-2 px-4 rounded my-2"
       >
-        <Text>hi</Text>
+        <Text>reload database</Text>
+      </Pressable>
+      <Pressable
+        accessibilityRole="button"
+        onPress={handleCalender}
+        className="bg-blue-500 py-2 px-4 rounded my-2"
+      >
+        <Text>to calendar</Text>
       </Pressable>
     </SafeAreaView>
   );

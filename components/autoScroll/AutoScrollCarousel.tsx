@@ -10,7 +10,7 @@ import {
 import CardModal from './AutoScrollCardModal';
 import { PlatterIngredientNutrition } from '@/types/Platter';
 
-const CARD_WIDTH = 120;
+const CARD_WIDTH = 140;
 const SPACING = 10;
 const SCROLL_STEP = 1;
 const FPS_INTERVAL = 16;
@@ -95,12 +95,12 @@ export default function AutoScrollCarousel({
   }, [isUserScrolling]);
 
   const flatPlatters = Object.values(platters).flat();
+
   const duplicatedPlatters = [...flatPlatters, ...flatPlatters];
 
   return (
     <View className="mt-6 h-40 justify-items-center items-center">
       <ScrollView
-        className="px-4"
         ref={scrollRef}
         horizontal
         scrollEnabled
@@ -113,7 +113,7 @@ export default function AutoScrollCarousel({
       >
         {duplicatedPlatters.map((platter, index) => (
           <Pressable
-            className="w-40 h-full bg-gray-300 mx-2 justify-center items-center rounded-xl active:opacity-50"
+            className="w-[140px] h-full bg-gray-300 mx-[10px] justify-center items-center rounded-xl active:opacity-50"
             key={`${platter.id}-${index}`}
             onPress={() => onCardPress(platter)}
           >
