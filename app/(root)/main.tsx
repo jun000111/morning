@@ -6,21 +6,34 @@ import { useEffect, useState } from 'react';
 import { getAllPlatters } from '@/services/platterService';
 import { PlatterIngredientNutrition } from '@/types/Platter';
 import { router } from 'expo-router';
+import { useAuth } from '@clerk/clerk-expo';
 
 const MainScreen = () => {
+  const { getToken } = useAuth();
+
+  const [token, setToken] = useState<string | null>(null);
   const [platters, setPlatters] = useState<
     Record<string, PlatterIngredientNutrition[]>
   >({});
+
+  useEffect(() => {
+    const fetchClerkToken = async () => {
+      const token = await getToken();
+      setToken(token);
+    };
+    fetchClerkToken();
+  }, []);
+
   useEffect(() => {
     const fetchPlatters = async () => {
-      const platters = await getAllPlatters();
+      const platters = await getAllPlatters(token);
       setPlatters(platters);
     };
     fetchPlatters();
-  }, []);
+  }, [token]);
 
   const handleReloadDatabase = async () => {
-    const platters = await getAllPlatters();
+    const platters = await getAllPlatters(token);
     console.log(platters);
   };
 
