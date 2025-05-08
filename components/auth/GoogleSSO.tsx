@@ -9,13 +9,13 @@ import { registerUser } from '@/services/authService';
 
 WebBrowser.maybeCompleteAuthSession();
 
-export default function GoogleSignIn() {
+export default function GoogleSSO({ page }: { page: string }) {
   useWarmUpBrowser();
   const router = useRouter();
   const { startSSOFlow } = useSSO();
   const { getToken } = useAuth(); // ✅ Hook is safe here
 
-  const handleGoogleSignIn = useCallback(async () => {
+  const handleGoogleSSO = useCallback(async () => {
     try {
       const redirectUrl = AuthSession.makeRedirectUri();
 
@@ -31,7 +31,9 @@ export default function GoogleSignIn() {
         const token = await getToken();
 
         // 🔐 Send token to backend to register user
-        await registerUser(token!);
+        if (page === 'signUp') {
+          await registerUser(token!);
+        }
 
         router.replace('/(root)/main');
       }
@@ -42,7 +44,12 @@ export default function GoogleSignIn() {
 
   return (
     <View>
-      <Button title="Sign in with Google" onPress={handleGoogleSignIn} />
+      <Button
+        title={
+          page === 'signUp' ? 'Sign up with Google' : 'Sign in with Google'
+        }
+        onPress={handleGoogleSSO}
+      />
     </View>
   );
 }

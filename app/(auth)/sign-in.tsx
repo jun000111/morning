@@ -3,7 +3,7 @@ import { Link, useRouter } from 'expo-router';
 import { Text, TextInput, TouchableOpacity, View } from 'react-native';
 import React from 'react';
 import { SignOutButton } from '@/components/auth/SignOutButton';
-import GoogleSignIn from '@/components/auth/GoogleSignIn';
+import GoogleSSO from '@/components/auth/GoogleSSO';
 
 export default function SignInScreen() {
   const { signIn, setActive, isLoaded } = useSignIn();
@@ -64,7 +64,7 @@ export default function SignInScreen() {
           <Text>Sign up</Text>
         </Link>
       </View>
-      <GoogleSignIn />
+      <GoogleSSO page="signIn" />
       <SignOutButton />
     </View>
   );

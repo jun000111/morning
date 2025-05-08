@@ -4,6 +4,7 @@ import { useSignUp, useAuth } from '@clerk/clerk-expo';
 import { Link, useRouter } from 'expo-router';
 import { registerUser } from '@/services/authService';
 import { UserRegisterDTO } from '@/dto/user.dto';
+import GoogleSSO from '@/components/auth/GoogleSSO';
 
 export default function SignUpScreen() {
   const { isLoaded, signUp, setActive } = useSignUp();
@@ -109,6 +110,7 @@ export default function SignUpScreen() {
         <TouchableOpacity onPress={onSignUpPress}>
           <Text>Continue</Text>
         </TouchableOpacity>
+        <GoogleSSO page="signUp" />
         <View style={{ display: 'flex', flexDirection: 'row', gap: 3 }}>
           <Text>Already have an account?</Text>
           <Link href="/sign-in">
