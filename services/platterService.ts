@@ -8,7 +8,7 @@ export const getAllPlatters = async (
     throw new Error('Token not exist');
   }
 
-  const res = await api.get('/platters', {
+  const res = await api.get('api/platters', {
     headers: {
       Authorization: `Bearer ${token}`,
     },

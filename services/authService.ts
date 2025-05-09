@@ -3,7 +3,7 @@ import { User } from '@/types/User';
 
 export const registerUser = async (token: string): Promise<User> => {
   const res = await api.post(
-    '/auth/register',
+    'api/auth/register',
     {}, // No need to send user info from frontend
     {
       headers: {
