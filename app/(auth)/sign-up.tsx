@@ -3,7 +3,7 @@ import { Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { useSignUp, useAuth } from '@clerk/clerk-expo';
 import { Link, useRouter } from 'expo-router';
 import { registerUser } from '@/services/authService';
-import { UserRegisterDTO } from '@/dto/user.dto';
+import { UserClerkRegisterDTO } from '@/dto/user.dto';
 import GoogleSSO from '@/components/auth/GoogleSSO';
 
 export default function SignUpScreen() {
@@ -21,17 +21,14 @@ export default function SignUpScreen() {
   const onSignUpPress = async () => {
     if (!isLoaded) return;
 
-    console.log(emailAddress, password);
-    const userDTO: UserRegisterDTO = {
-      username: 'testing',
+    const userInfo: UserClerkRegisterDTO = {
       emailAddress,
       password,
     };
 
     // Start sign-up process using email and password provided
     try {
-      await signUp.create(userDTO);
-      ``;
+      await signUp.create(userInfo);
 
       // Send user an email with verification code
       await signUp.prepareEmailAddressVerification({ strategy: 'email_code' });

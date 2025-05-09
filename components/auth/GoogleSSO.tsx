@@ -31,9 +31,7 @@ export default function GoogleSSO({ page }: { page: string }) {
         const token = await getToken();
 
         // 🔐 Send token to backend to register user
-        if (page === 'signUp') {
-          await registerUser(token!);
-        }
+        await registerUser(token!);
 
         router.replace('/(root)/main');
       }
