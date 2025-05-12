@@ -4,7 +4,7 @@ import AutoScrollCarousel from '@/components/autoScroll/AutoScrollCarousel';
 import { SignOutButton } from '@/components/auth/SignOutButton';
 import { useEffect, useState } from 'react';
 import { getAllPlatters } from '@/services/platterService';
-import { PlatterIngredientNutrition } from '@/types/Platter';
+import { PlatterDTO } from '@/dto/platter.dto';
 import { router } from 'expo-router';
 import { useAuth } from '@clerk/clerk-expo';
 
@@ -12,9 +12,7 @@ const MainScreen = () => {
   const { getToken } = useAuth();
 
   const [token, setToken] = useState<string | null>(null);
-  const [platters, setPlatters] = useState<
-    Record<string, PlatterIngredientNutrition[]>
-  >({});
+  const [platters, setPlatters] = useState<PlatterDTO[]>([]);
 
   useEffect(() => {
     const fetchClerkToken = async () => {

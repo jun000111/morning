@@ -8,7 +8,7 @@ import {
   Pressable,
 } from 'react-native';
 import CardModal from './AutoScrollCardModal';
-import { PlatterIngredientNutrition } from '@/types/Platter';
+import { PlatterDTO } from '@/dto/platter.dto';
 
 const CARD_WIDTH = 140;
 const SPACING = 10;
@@ -19,7 +19,7 @@ const RESUME_DELAY = 800;
 export default function AutoScrollCarousel({
   platters,
 }: {
-  platters: Record<string, PlatterIngredientNutrition[]>;
+  platters: PlatterDTO[];
 }) {
   const scrollRef = useRef<ScrollView>(null);
   const scrollPos = useRef(0);
@@ -27,10 +27,9 @@ export default function AutoScrollCarousel({
   const resumeTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const [isUserScrolling, setIsUserScrolling] = useState(false);
 
-  const [selectedCard, setSelectdCard] =
-    useState<PlatterIngredientNutrition | null>(null);
+  const [selectedCard, setSelectdCard] = useState<PlatterDTO | null>(null);
 
-  const onCardPress = (platter: PlatterIngredientNutrition) => {
+  const onCardPress = (platter: PlatterDTO) => {
     setSelectdCard(platter);
   };
   const handleOnCardClose = () => {
@@ -49,8 +48,7 @@ export default function AutoScrollCarousel({
         animated: false,
       });
 
-      const maxScroll =
-        (CARD_WIDTH + SPACING * 2) * Object.keys(platters).length;
+      const maxScroll = (CARD_WIDTH + SPACING * 2) * platters.length;
 
       if (scrollPos.current >= maxScroll) {
         scrollPos.current = 0;
@@ -94,9 +92,7 @@ export default function AutoScrollCarousel({
     };
   }, [isUserScrolling]);
 
-  const flatPlatters = Object.values(platters).flat();
-
-  const duplicatedPlatters = [...flatPlatters, ...flatPlatters];
+  const duplicatedPlatters = platters ? [...platters, ...platters] : [];
 
   return (
     <View className="mt-6 h-40 justify-items-center items-center">

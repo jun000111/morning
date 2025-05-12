@@ -1,17 +1,13 @@
 import api from '@/lib/api';
-import { PlatterIngredientNutrition } from '@/types/Platter';
+import { CalendarPlatterDTO, PlatterDTO } from '@/dto/platter.dto';
 
-export const getAllPlatters = async (
-  token: string | null
-): Promise<Record<string, PlatterIngredientNutrition[]>> => {
-  if (!token) {
-    throw new Error('Token not exist');
-  }
-
-  const res = await api.get('api/platters', {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
+export const getAllPlatters = async (): Promise<PlatterDTO[]> => {
+  const res = await api.get('api/platters');
   return res.data;
+};
+
+export const getCalenderPlatters = async (): Promise<CalendarPlatterDTO[]> => {
+  const results = await api.get(`api/platters/calendar`);
+  console.log(results);
+  return results.data;
 };

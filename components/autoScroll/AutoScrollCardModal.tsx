@@ -1,18 +1,20 @@
-import { Ingredient, PlatterIngredientNutrition } from '@/types/Platter';
+import { PlatterDTO } from '@/dto/platter.dto';
+import { IngredientBaseDTO } from '@/dto/ingredient.dto';
 import { Modal, View, Text, Pressable } from 'react-native';
 
 interface Props {
   visible: boolean;
-  platter: PlatterIngredientNutrition;
+  platter: PlatterDTO;
   onClose: () => void;
 }
 
 // Todo : allergy ingredients should have a red outline
 export default function CardModal({ visible, platter, onClose }: Props) {
-  const allIngredients = platter.ingredients.map((ingredient: Ingredient) => {
-    return ingredient.name;
-  });
-  console.log(allIngredients);
+  const allIngredients = platter.ingredients.map(
+    (ingredient: IngredientBaseDTO) => {
+      return ingredient.name;
+    }
+  );
   return (
     <Modal
       visible={visible}
