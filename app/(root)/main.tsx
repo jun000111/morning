@@ -24,14 +24,14 @@ const MainScreen = () => {
 
   useEffect(() => {
     const fetchPlatters = async () => {
-      const platters = await getAllPlatters(token);
+      const platters = await getAllPlatters();
       setPlatters(platters);
     };
     fetchPlatters();
   }, [token]);
 
   const handleReloadDatabase = async () => {
-    const platters = await getAllPlatters(token);
+    const platters = await getAllPlatters();
     console.log(platters);
   };
 

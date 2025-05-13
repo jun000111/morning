@@ -6,10 +6,16 @@ interface Props {
   visible: boolean;
   platter: PlatterDTO;
   onClose: () => void;
+  calendar?: boolean;
 }
 
 // Todo : allergy ingredients should have a red outline
-export default function CardModal({ visible, platter, onClose }: Props) {
+export default function CardModal({
+  visible,
+  platter,
+  onClose,
+  calendar = false,
+}: Props) {
   const allIngredients = platter.ingredients.map(
     (ingredient: IngredientBaseDTO) => {
       return ingredient.name;
@@ -22,7 +28,7 @@ export default function CardModal({ visible, platter, onClose }: Props) {
       animationType="fade"
       onRequestClose={onClose}
     >
-      <View className="flex-1 justify-center items-center bg-black/50">
+      <View className="flex-1 justify-center items-center bg-black/60">
         <View className="w-4/5 bg-white p-6 rounded-xl">
           <Text className="text-lg font-bold mb-2">{platter.name}</Text>
           <Text className="font-bold mb-4">Insert Image Here</Text>
@@ -31,30 +37,40 @@ export default function CardModal({ visible, platter, onClose }: Props) {
             Ingredients : {allIngredients.join(' , ')}
           </Text>
 
-          <Text className="font-bold">
-            Calories : {platter.nutriSummary.calories}
-          </Text>
-          <Text className="font-bold">
-            Carbs : {platter.nutriSummary.carbs}
-          </Text>
-          <Text className="font-bold">Fat : {platter.nutriSummary.fat}</Text>
-          <Text className="font-bold">
-            Fiber : {platter.nutriSummary.fiber.toPrecision(2)}
-          </Text>
-          <Text className="font-bold">
-            Sodium : {platter.nutriSummary.sodium}
-          </Text>
-          <Text className="font-bold">
-            Cholesterol : {platter.nutriSummary.cholesterol}
-          </Text>
+          <View>
+            {Object.entries(platter.nutritions).map(([key, val], index) => (
+              <Text key={index} className="font-bold">
+                {key} : {val}
+              </Text>
+            ))}
+          </View>
 
-          <Pressable
-            accessibilityRole="button"
-            onPress={onClose}
-            className="bg-blue-500 py-2 px-4 rounded mt-4 "
-          >
-            <Text className="text-white text-center">Close</Text>
-          </Pressable>
+          {calendar ? (
+            <View className="flex-row justify-center mt-4 gap-2">
+              <Pressable
+                accessibilityRole="button"
+                onPress={onClose}
+                className="bg-red-500 py-2 px-4 rounded mt-4 flex-1"
+              >
+                <Text className="text-white text-center">Block</Text>
+              </Pressable>
+              <Pressable
+                accessibilityRole="button"
+                onPress={onClose}
+                className="bg-blue-500 py-2 px-4 rounded mt-4 flex-1"
+              >
+                <Text className="text-white text-center">Close</Text>
+              </Pressable>
+            </View>
+          ) : (
+            <Pressable
+              accessibilityRole="button"
+              onPress={onClose}
+              className="bg-blue-500 py-2 px-4 rounded mt-4 "
+            >
+              <Text className="text-white text-center">Close</Text>
+            </Pressable>
+          )}
         </View>
       </View>
     </Modal>

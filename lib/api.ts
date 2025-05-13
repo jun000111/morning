@@ -4,6 +4,7 @@ import { getClerkInstance } from '@clerk/clerk-expo';
 
 const api = axios.create({
   baseURL: ENV.API_URL,
+  //baseURL: 'http://192.168.243.232:3000',
   headers: {
     'Content-Type': 'application/json',
   },
