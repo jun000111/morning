@@ -32,7 +32,6 @@ const MainScreen = () => {
 
   const handleReloadDatabase = async () => {
     const platters = await getAllPlatters();
-    console.log(platters);
   };
 
   const handleCalender = () => {

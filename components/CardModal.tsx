@@ -1,4 +1,4 @@
-import { PlatterDTO } from '@/dto/platter.dto';
+import { CalendarPlatterDTO, PlatterDTO } from '@/dto/platter.dto';
 import { IngredientBaseDTO } from '@/dto/ingredient.dto';
 import { Modal, View, Text, Pressable } from 'react-native';
 
@@ -6,7 +6,8 @@ interface Props {
   visible: boolean;
   platter: PlatterDTO;
   onClose: () => void;
-  calendar?: boolean;
+  isBlockable?: boolean;
+  onBlock?: (date: string) => void;
 }
 
 // Todo : allergy ingredients should have a red outline
@@ -14,13 +15,21 @@ export default function CardModal({
   visible,
   platter,
   onClose,
-  calendar = false,
+  isBlockable = false,
+  onBlock = undefined,
 }: Props) {
   const allIngredients = platter.ingredients.map(
     (ingredient: IngredientBaseDTO) => {
       return ingredient.name;
     }
   );
+
+  const handleOnBlock = (platter: PlatterDTO | CalendarPlatterDTO) => {
+    if ('date' in platter && onBlock) {
+      onBlock(platter.date);
+    }
+  };
+
   return (
     <Modal
       visible={visible}
@@ -45,11 +54,11 @@ export default function CardModal({
             ))}
           </View>
 
-          {calendar ? (
+          {isBlockable ? (
             <View className="flex-row justify-center mt-4 gap-2">
               <Pressable
                 accessibilityRole="button"
-                onPress={onClose}
+                onPress={() => handleOnBlock(platter)}
                 className="bg-red-500 py-2 px-4 rounded mt-4 flex-1"
               >
                 <Text className="text-white text-center">Block</Text>

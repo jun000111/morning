@@ -7,7 +7,7 @@ import {
   NativeScrollEvent,
   Pressable,
 } from 'react-native';
-import CardModal from './AutoScrollCardModal';
+import CardModal from '../CardModal';
 import { PlatterDTO } from '@/dto/platter.dto';
 
 const CARD_WIDTH = 140;

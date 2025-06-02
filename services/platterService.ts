@@ -8,6 +8,5 @@ export const getAllPlatters = async (): Promise<PlatterDTO[]> => {
 
 export const getCalenderPlatters = async (): Promise<CalendarPlatterDTO[]> => {
   const results = await api.get(`api/platters/calendar`);
-  console.log(results);
   return results.data;
 };
